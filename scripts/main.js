@@ -4,7 +4,6 @@ function stopVideo(){
     if(!stream) return;
 
     const tracks=stream.getTracks();
-    let track
     tracks.forEach(track => track.stop());
     video.srcObject = null;
 }
