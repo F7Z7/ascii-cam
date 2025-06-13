@@ -9,18 +9,16 @@ function stopVideo(){
     asciiOutput.style.display = "none";
     video.style.display = "none";
 }
-function startVideo(){
-    const video=document.getElementById('video');
-    if(navigator.mediaDevices.getUserMedia){
-        navigator.mediaDevices.getUserMedia({video:true}) //user allows
-        .then(stream=>{
+async function startVideo() {
+    if (navigator.mediaDevices.getUserMedia) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
-        })
-            .catch(error=>{
-                console.error(error);
-            })
-    }
-    else{
-        console.log("getUserMedia not supported on your browser!");
+        } catch (err) {
+            console.error("Error accessing camera", err);
+        }
+    } else {
+        console.log("getUserMedia not supported");
     }
 }
+ startVideo() // strat it already
