@@ -42,7 +42,7 @@ function asciiFrame() {
             const g=data[i+1];//g
             const b=data[i+2];
 
-            const imagePix= 0.2126 * r + 0.7152 * g + 0.0722 * b; //perceptual luminance
+            const imagePix=  0.2126 * r + 0.7152 * g + 0.0722 * b;
             const charIdx = Math.floor((imagePix / 255) * (asciiChars.length - 1));
             row+=asciiChars.charAt(charIdx);
         }

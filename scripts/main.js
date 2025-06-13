@@ -6,6 +6,8 @@ function stopVideo(){
     const tracks=stream.getTracks();
     tracks.forEach(track => track.stop());
     video.srcObject = null;
+    asciiOutput.style.display = "none";
+    video.style.display = "none";
 }
 function startVideo(){
     const video=document.getElementById('video');
