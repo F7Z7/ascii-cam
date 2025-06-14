@@ -6,6 +6,23 @@ const asciiOutput = document.getElementById('asciiOutput');
 const asciiChars = "@#W$9876543210?!abc;:+=-,._ ";
 
 let asciiInterval = false
+let brightnessMultiplier=1
+let sendVal=document.getElementById("sendVal");
+let brightnessVal=document.getElementById("brightnessVal");
+sendVal.addEventListener("click", function(){
+    const value=parseFloat(brightnessVal.value);
+    if(isNaN(value)) {
+        alert("Please enter a valid number");
+    }
+    else if(value>10 || value<=0){
+        alert("please chooes a number btw 0 and 10")
+    }
+    else{
+        brightnessMultiplier = value;
+        console.log("brightnessMultiplier: "+brightnessMultiplier);
+    }
+})
+
 
 function convertToAscii() {
     asciiOutput.style.display = "block";
@@ -42,8 +59,11 @@ function asciiFrame() {
             const g=data[i+1];//g
             const b=data[i+2];
 
-            const imagePix=  0.2126 * r + 0.7152 * g + 0.0722 * b;
-            const charIdx = Math.floor((imagePix / 255) * (asciiChars.length - 1));
+            const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            // console.log(brightness)
+            const adjusted = Math.min(255, Math.max(0, brightness * brightnessMultiplier));
+            // console.log(adjusted)  // increase intensity by 1.5x
+            const charIdx = Math.floor((adjusted / 255) * (asciiChars.length - 1));
             row+=asciiChars.charAt(charIdx);
         }
         ascii += row + "\n";

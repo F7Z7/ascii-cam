@@ -67,7 +67,7 @@ video {
 }
 
 
-.controls {
+.controls ,input{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,7 +76,7 @@ video {
 }
 
 
-.controls button {
+.controls button,input {
     padding: 12px 20px;
     background-color: transparent;
     border: 2px solid #00ff41;
@@ -89,7 +89,7 @@ video {
     transition: 0.2s;
 }
 
-.controls button:hover {
+.controls button:hover,input:hover {
     box-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
     background-color: #00ff41;
     color: #000;
