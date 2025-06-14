@@ -23,7 +23,11 @@ sendVal.addEventListener("click", function(){
     }
 })
 
+function resetBrightness(){
 
+    brightnessMultiplier=1
+    brightnessVal.value="" //clearing te input
+}
 function convertToAscii() {
     asciiOutput.style.display = "block";
     // video.style.visibility = "hidden";

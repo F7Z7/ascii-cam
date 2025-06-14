@@ -65,9 +65,8 @@ video, #asciiOutput {
 video {
     z-index: 1;
 }
-
-
-.controls ,input{
+/* Flex container for control alignment */
+.controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,8 +74,9 @@ video {
     margin-top: 20px;
 }
 
-
-.controls button,input {
+/* Target buttons and inputs inside .controls only */
+.controls button,
+.controls input {
     padding: 12px 20px;
     background-color: transparent;
     border: 2px solid #00ff41;
@@ -89,8 +89,19 @@ video {
     transition: 0.2s;
 }
 
-.controls button:hover,input:hover {
+/* Hover effect */
+.controls button:hover,
+.controls input:hover,#brightnessVal:hover {
     box-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
     background-color: #00ff41;
     color: #000;
+}
+
+
+#brightnessVal::placeholder {
+    color: #00ff41;
+
+}
+#brightnessVal:active,#brightnessVal:focus {
+    background-color: #00ff41;
 }
