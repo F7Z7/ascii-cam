@@ -1,3 +1,5 @@
+import {initHandPoseModel} from "./snap.js";
+
 function stopVideo(){
     const video=document.getElementById('video');
     const stream=video.srcObject;
@@ -14,6 +16,7 @@ async function startVideo() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
+            initHandPoseModel(video);
         } catch (err) {
             console.error("Error accessing camera", err);
         }
