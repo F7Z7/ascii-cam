@@ -1,5 +1,12 @@
 let handPoseModel = null
 
+function calculateDistance(x1, x2, y1, y2) {
+    const dx2 = Math.pow(x2 - x1, 2)
+    const dy2 = Math.pow(y2 - y1, 2)
+    const distance = Math.sqrt(dx2 + dy2);
+    return distance;
+}
+
 export async function initHandPoseModel() {
     const inputVideo = document.getElementById("video");
     try {
@@ -17,15 +24,15 @@ export async function initHandPoseModel() {
             handPoseModel = await handPoseDetection.createDetector(model, detectorConfig);
             const estimationConfig = {flipHorizontal: true};
             const hands = await handPoseModel.estimateHands(inputVideo, estimationConfig);
-            let handDetected=false
+            let handDetected = false
             if (hands.length > 0) {
                 // console.log("🤚 Hands detected:", hands);
                 handDetected = true;
 
-                const keyPoints=hands[0].keypoints
+                const keyPoints = hands[0].keypoints
                 console.log(keyPoints);
-                const thumbTip=keyPoints[4]
-                const middleTip=keyPoints[12]
+                const thumbTip = keyPoints[4]
+                const middleTip = keyPoints[12]
                 console.log(`thumbTip=${JSON.stringify(thumbTip)} and middleTip=${JSON.stringify(middleTip)}`);
                 //only console if hand data is there
             }
