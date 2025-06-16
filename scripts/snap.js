@@ -1,4 +1,8 @@
 let handPoseModel = null
+let handSnap=false
+let snapAlert=false
+let minHandistance=30
+let maxHandistance=90
 
 function calculateDistance(x1, x2, y1, y2) {
     const dx2 = Math.pow(x2 - x1, 2)
@@ -6,7 +10,18 @@ function calculateDistance(x1, x2, y1, y2) {
     const distance = Math.sqrt(dx2 + dy2);
     return distance;
 }
+function detectSnap(currentDistance) {
+   if(currentDistance > minHandistance && currentDistance < maxHandistance && !handSnap){
+       convertToAscii()
+       handSnap=true
+   }
 
+       // else if (handSnap&&!snapAlert){
+       //     alert("already snap detected")
+       //     snapAlert=true
+       // }
+
+}
 export async function initHandPoseModel() {
     const inputVideo = document.getElementById("video");
     try {
@@ -36,14 +51,10 @@ export async function initHandPoseModel() {
                 console.log(`thumbTip=${JSON.stringify(thumbTip)} and middleTip=${JSON.stringify(middleTip)}`);
                 //only console if hand data is there
                 let distance=calculateDistance(thumbTip.x, middleTip.x ,thumbTip.y,middleTip.y);
-                console.log(distance)
-                if (distance<100) {
-                    alert("fingers are close")
-                }
-                if (distance >=100) {
-                    alert("fingers are far")
-                }
+                // console.log(distance)
+                detectSnap(distance);
             }
+
 
             requestAnimationFrame(detectHands);
 
