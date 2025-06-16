@@ -35,10 +35,16 @@ export async function initHandPoseModel() {
                 const middleTip = keyPoints[12]
                 console.log(`thumbTip=${JSON.stringify(thumbTip)} and middleTip=${JSON.stringify(middleTip)}`);
                 //only console if hand data is there
+                let distance=calculateDistance(thumbTip.x, middleTip.x ,thumbTip.y,middleTip.y);
+                console.log(distance)
+                if (distance<100) {
+                    alert("fingers are close")
+                }
+                if (distance >=100) {
+                    alert("fingers are far")
+                }
             }
-            if (handDetected) {
-                alert("kitti mone")
-            }
+
             requestAnimationFrame(detectHands);
 
         }
