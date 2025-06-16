@@ -8,7 +8,7 @@ export async function initHandPoseModel() {
         const detectorConfig = {
             runtime: 'mediapipe', // or 'tfjs',
             solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
-            modelType: 'full',
+            modelType: 'lite',
             maxHands: 1,/// single handetection
 
         };
@@ -19,9 +19,14 @@ export async function initHandPoseModel() {
             const hands = await handPoseModel.estimateHands(inputVideo, estimationConfig);
             let handDetected=false
             if (hands.length > 0) {
-                console.log("🤚 Hands detected:", hands);
+                // console.log("🤚 Hands detected:", hands);
                 handDetected = true;
 
+                const keyPoints=hands[0].keypoints
+                console.log(keyPoints);
+                const thumbTip=keyPoints[4]
+                const middleTip=keyPoints[12]
+                console.log(`thumbTip=${JSON.stringify(thumbTip)} and middleTip=${JSON.stringify(middleTip)}`);
                 //only console if hand data is there
             }
             if (handDetected) {
