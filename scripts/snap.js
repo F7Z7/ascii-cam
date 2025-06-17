@@ -45,10 +45,10 @@ export async function initHandPoseModel() {
                 handDetected = true;
 
                 const keyPoints = hands[0].keypoints
-                console.log(keyPoints);
+                // console.log(keyPoints);
                 const thumbTip = keyPoints[4]
                 const middleTip = keyPoints[12]
-                console.log(`thumbTip=${JSON.stringify(thumbTip)} and middleTip=${JSON.stringify(middleTip)}`);
+                // console.log(`thumbTip=${JSON.stringify(thumbTip)} and middleTip=${JSON.stringify(middleTip)}`);
                 //only console if hand data is there
                 let distance=calculateDistance(thumbTip.x, middleTip.x ,thumbTip.y,middleTip.y);
                 // console.log(distance)
