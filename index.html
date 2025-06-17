@@ -11,14 +11,14 @@
     <div class="videoHolder">
         <video id="video" autoplay muted playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
-        <pre id="asciiOutput" style="display:none;"></pre>
+        <pre id="asciiOutput" style="display:none"></pre>
     </div>
     <div class="controls">
 <!--        <button id="startButton" onclick="startVideo(this)">Start</button>-->
 <!--        <button id="stopButton" onclick="stopVideo(this)">Stop</button>-->
         <input type="text" placeholder="enter desired brightness" id="brightnessVal" style="background-color: transparent">
         <input type="submit" id="sendVal" value="Toggle Brightness">
-        <button id="stop" >Reset Brightness</button>
+        <button id="resetBrightness" onclick="resetBrightness()">Reset Brightness</button>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
