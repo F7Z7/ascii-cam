@@ -56,11 +56,11 @@ export async function initHandPoseModel() {
             }
 
 
-            requestAnimationFrame(detectHands);
+            setTimeout(detectHands, 300); ;
 
         }
 
-        detectHands();
+        setTimeout(() => requestAnimationFrame(detectHands), 100);
     } catch (e) {
         console.error(`${e} error occured`);
     }
