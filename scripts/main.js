@@ -1,16 +1,24 @@
 import {initHandPoseModel} from "./snap.js";
 
-function stopVideo(){
+document.getElementById("stop").addEventListener("click", function(){
     const video=document.getElementById('video');
     const stream=video.srcObject;
     if(!stream) return;
 
-    const tracks=stream.getTracks();
-    tracks.forEach(track => track.stop());
-    video.srcObject = null;
     asciiOutput.style.display = "none";
-    video.style.display = "none";
-}
+    video.style.display = "block";
+    video.style.position = "fixed";
+    video.style.top = "50%";
+    video.style.left = "50%";
+    video.style.transform = "translate(-50%, -50%)";
+    video.style.width = "800px";
+    video.style.height = "100%";
+    video.style.zIndex = "3";
+
+
+})
+
+
 async function startVideo() {
     if (navigator.mediaDevices.getUserMedia) {
         try {
