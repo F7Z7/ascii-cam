@@ -1,3 +1,5 @@
+import {stopAscii} from "./main.js";
+
 let handPoseModel = null;
 let handSnap = false;
 let minHandistance = 30;
@@ -16,10 +18,28 @@ function detectSnap(keypoints) {
     const distance = calculateDistance(thumbTip.x, middleTip.x, thumbTip.y, middleTip.y);
 
     if (distance > minHandistance && distance < maxHandistance && !handSnap) {
-        convertToAscii(); //conversion
+        setTimeout(convertToAscii,30)
+         //conversion
         handSnap = true;
     }
 
+}
+function exitAscii(hands){
+    if(hands.length == 2){
+        //two hands left and right
+        const hand1=hands[0]
+        const hand2=hands[1]
+
+        let index1=hand1.keypoints[8]
+        let index2=hand2.keypoints[8]
+
+        let distance=calculateDistance(index1.x,index2.x,index1.y,index2.y);
+
+        if(distance < 30){
+            setTimeout(stopAscii,30)
+
+        }
+    }
 }
 //checking for detection of hands in the video
 async function detectHands(inputVideo) {
@@ -32,7 +52,9 @@ async function detectHands(inputVideo) {
             const keypoints = hands[0].keypoints;
             detectSnap(keypoints);//detection of snap
         }
-
+        if(hands.length ===2){
+            exitAscii(hands);
+        }
         setTimeout(() => requestAnimationFrame(loop), 300);
     }
 
@@ -49,7 +71,7 @@ export async function initHandPoseModel() {
             runtime: 'mediapipe',
             solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
             modelType: 'lite',
-            maxHands: 1
+            maxHands: 2
         };
 
         handPoseModel = await handPoseDetection.createDetector(model, detectorConfig);

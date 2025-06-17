@@ -1,6 +1,6 @@
 import {initHandPoseModel} from "./snap.js";
 
-document.getElementById("stop").addEventListener("click", function(){
+export function stopAscii(){
     const video=document.getElementById('video');
     const stream=video.srcObject;
     if(!stream) return;
@@ -16,7 +16,7 @@ document.getElementById("stop").addEventListener("click", function(){
     video.style.zIndex = "3";
 
 
-})
+}
 
 
 async function startVideo() {
