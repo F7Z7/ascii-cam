@@ -30,8 +30,8 @@ function resetBrightness() {
 function convertToAscii() {
     asciiOutput.style.display = "block";
     // video.style.visibility = "hidden";
-    canvas.width = 160;
-    canvas.height = 60;
+    canvas.width = 220;
+    canvas.height = 90;
 
     asciiInterval = true
 
