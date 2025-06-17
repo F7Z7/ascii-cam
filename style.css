@@ -6,7 +6,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #1e7aa0;
+    background: linear-gradient(135deg, #0d0d0d, #1f2f3f);
 }
 
 .main {
@@ -71,37 +71,49 @@ video {
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    margin-top: 20px;
+    margin-top: 25px;
+    flex-wrap: wrap;
 }
 
-/* Target buttons and inputs inside .controls only */
 .controls button,
 .controls input {
     padding: 12px 20px;
-    background-color: transparent;
-    border: 2px solid #00ff41;
-    color: #00ff41;
-    font-size: 18px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px solid #00ffee;
+    color: #00ffee;
+    font-size: 16px;
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
-    border-radius: 5px;
-    transition: 0.2s;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    letter-spacing: 1px;
 }
 
-/* Hover effect */
 .controls button:hover,
-.controls input:hover,#brightnessVal:hover {
-    box-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
-    background-color: #00ff41;
+.controls input:hover,
+#brightnessVal:hover {
+    box-shadow: 0 0 10px #00ffee, 0 0 20px #00ffee;
+    background-color: #00ffee;
     color: #000;
+    transform: scale(1.05);
 }
 
+#brightnessVal {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid #00ffee;
+    color: #00ffee;
+}
 
 #brightnessVal::placeholder {
-    color: #00ff41;
-
+    color: #00ffee;
+    opacity: 0.7;
 }
-#brightnessVal:active,#brightnessVal:focus {
-    background-color: #00ff41;
+
+#brightnessVal:focus {
+    background-color: #00ffee;
+    color: #000;
+    outline: none;
+    box-shadow: 0 0 10px #00ffee;
 }
