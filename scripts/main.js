@@ -1,12 +1,13 @@
 import {initHandPoseModel} from "./snap.js";
 
-export function stopAscii(){
-    const video=document.getElementById('video');
-    const stream=video.srcObject;
-    if(!stream) return;
+export function stopAscii() {
+    const video = document.getElementById('video');
+    const stream = video.srcObject;
+    if (!stream) return;
+    setCenterVideo(video);
+}
 
-    asciiOutput.style.display = "none";
-    video.style.display = "block";
+function setCenterVideo(video) {
     video.style.position = "fixed";
     video.style.top = "50%";
     video.style.left = "50%";
@@ -15,15 +16,22 @@ export function stopAscii(){
     video.style.height = "100%";
     video.style.zIndex = "3";
 
-
+   //reset
+    video.style.margin = "0";
+    video.style.border = "none";
+    video.style.borderRadius = "0";
+    video.style.boxShadow = "none";
+    video.style.backgroundColor = "transparent";
 }
+
 
 
 async function startVideo() {
     if (navigator.mediaDevices.getUserMedia) {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({video: true});
             video.srcObject = stream;
+            setCenterVideo(video);
             initHandPoseModel(video);
         } catch (err) {
             console.error("Error accessing camera", err);
@@ -32,4 +40,5 @@ async function startVideo() {
         console.log("getUserMedia not supported");
     }
 }
- startVideo() // strat it already
+
+startVideo() // strat it already

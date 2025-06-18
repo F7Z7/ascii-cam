@@ -37,14 +37,16 @@ function convertToAscii() {
 
     setTimeout(() => requestAnimationFrame(asciiFrame), 100);
     video.style.position = "fixed";
-    video.style.top = "10px";
-    video.style.right = "10px";
+    video.style.top = "50px";
+    video.style.left = "100px";
+    video.style.margin = "50px";
     video.style.width = "200px";
     video.style.height = "auto";
     video.style.zIndex = "3";
     video.style.border = "2px solid lime";
     video.style.borderRadius = "10px";
     video.style.boxShadow = "0 0 10px lime";
+    video.style.backgroundColor = "black";
 }
 
 function asciiFrame(timestamp) {
