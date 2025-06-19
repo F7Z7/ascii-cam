@@ -2,11 +2,11 @@ import {stopAscii} from "./main.js";
 
 let handPoseModel = null;
 let handSnap = false;
-let minHandistance = 30;
-let maxHandistance = 90;
+let minHandistance = 10;
+let maxHandistance = 30;
 let SNAP_TIME_LAG=300
 let exitCooldown = false;
-
+let wasInsnapRange=false;
 function calculateDistance(x1, x2, y1, y2) {
     const dx2 = Math.pow(x2 - x1, 2);
     const dy2 = Math.pow(y2 - y1, 2);
@@ -19,7 +19,8 @@ function detectSnap(keypoints) {
 if(!thumbTip || !middleTip || thumbTip.score<.5 || middleTip.score<.5) return null;
 
     const distance = calculateDistance(thumbTip.x, middleTip.x, thumbTip.y, middleTip.y);
-    if (distance > minHandistance && distance < maxHandistance && !handSnap) {
+    let inSnapRange=distance > minHandistance && distance < maxHandistance //returns a bool
+    if ( inSnapRange&& !handSnap  ) {
         console.log("snap detected")
         setTimeout(() => {
             conseCutiveCoolDown();
@@ -29,7 +30,7 @@ if(!thumbTip || !middleTip || thumbTip.score<.5 || middleTip.score<.5) return nu
         handSnap = true;
         exitCooldown = false;
     }
-
+    // wasInsnapRange=inSnapRange ;
 }
 function exitAscii(hands){
     if(hands.length == 2 && handSnap &&exitCooldown){
