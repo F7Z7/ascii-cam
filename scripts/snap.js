@@ -2,11 +2,12 @@ import {stopAscii} from "./main.js";
 
 let handPoseModel = null;
 let handSnap = false;
-let minHandistance = 10;
-let maxHandistance = 30;
-let SNAP_TIME_LAG=300
-let exitCooldown = false;
-let wasInsnapRange=false;
+let minHandDistance = 20;
+let maxHandDistance = 50;
+let SNAP_TIME_LAG = 300;
+let isInCooldown = false;
+let wasInSnapRange = false;
+
 function calculateDistance(x1, x2, y1, y2) {
     const dx2 = Math.pow(x2 - x1, 2);
     const dy2 = Math.pow(y2 - y1, 2);
@@ -14,87 +15,113 @@ function calculateDistance(x1, x2, y1, y2) {
 }
 
 function detectSnap(keypoints) {
+    // Don't process if already snapped or in cooldown
+    if (handSnap || isInCooldown) return;
+
     const thumbTip = keypoints[4];
     const middleTip = keypoints[12];
-if(!thumbTip || !middleTip || thumbTip.score<.5 || middleTip.score<.5) return null;
+
+    if(!thumbTip || !middleTip || thumbTip.score < 0.5 || middleTip.score < 0.5) return;
 
     const distance = calculateDistance(thumbTip.x, middleTip.x, thumbTip.y, middleTip.y);
-    let inSnapRange=distance > minHandistance && distance < maxHandistance //returns a bool
-    if ( inSnapRange&& !handSnap  ) {
-        console.log("snap detected")
-        setTimeout(() => {
-            conseCutiveCoolDown();
-            convertToAscii();
-        }, SNAP_TIME_LAG);
-        //conversion
+    // console.log("Thumb-Middle distance:", distance);
+
+    let inSnapRange = distance >= minHandDistance && distance <= maxHandDistance;
+
+
+    if (inSnapRange && !wasInSnapRange && !handSnap) {
+        console.log("SNAP DETECTED! Distance:", distance);
+
+        // Set states immediately
         handSnap = true;
-        exitCooldown = false;
+        isInCooldown = true;
+
+        setTimeout(() => {
+            // Add your conversion logic here
+            // console.log("Converting to ASCII...");
+            convertToAscii();
+
+
+            startCooldown();
+        }, SNAP_TIME_LAG);
     }
-    // wasInsnapRange=inSnapRange ;
+
+    wasInSnapRange = inSnapRange;
 }
-function exitAscii(hands){
-    if(hands.length == 2 && handSnap &&exitCooldown){
-        //two hands left and right
-        const hand1=hands[0]
-        const hand2=hands[1]
+
+function exitAscii(hands) {
+    // Only allow exit if currently in ASCII mode and not in cooldown
+    if (hands.length === 2 && handSnap && !isInCooldown) {
+        const hand1 = hands[0];
+        const hand2 = hands[1];
+
         if (!hand1.keypoints[8] || !hand2.keypoints[8] ||
             hand1.keypoints[8].score < 0.5 || hand2.keypoints[8].score < 0.5) {
             return;
         }
-        let index1=hand1.keypoints[8]
-        let index2=hand2.keypoints[8]
 
-        let distance=calculateDistance(index1.x,index2.x,index1.y,index2.y);
+        let index1 = hand1.keypoints[8];
+        let index2 = hand2.keypoints[8];
+
+        let distance = calculateDistance(index1.x, index2.x, index1.y, index2.y);
         console.log("Distance between hands:", distance);
 
-        if(distance < 40 && distance > 10){
-           setTimeout(()=>{
-               stopAscii();
-               resetSnapState();
-               conseCutiveCoolDown();
+        if (distance < 40 && distance > 10) {
+            console.log("EXIT DETECTED!");
 
-           },300)
+            // Set cooldown immediately
+            isInCooldown = true;
 
+            setTimeout(() => {
+                stopAscii();
+                resetSnapState();
+            }, 300);
         }
     }
 }
-function resetSnapState() {
-    // Don't reset handSnap immediately
-    exitCooldown = false;
 
-    // Reset both states *after* the cooldown ends
-    setTimeout(() => {
-        handSnap = false;
-        exitCooldown = true;
-    }, 1000); // match your cooldown period
+function resetSnapState() {
+    console.log("Resetting snap state...");
+    handSnap = false;
+    wasInSnapRange = false;
 }
-//so that after exit the next snap doesnt occur simulatnaeltously
-function conseCutiveCoolDown() {
-    exitCooldown = false;
+
+function startCooldown() {
+    isInCooldown = true;
     setTimeout(() => {
-        exitCooldown = true;
-    }, 1000); // 1 second cooldown instead of 30ms
+        isInCooldown = false;
+        // console.log("Cooldown ended - ready for exit detection");
+    }, 100);
 }
-//checking for detection of hands in the video
+
 async function detectHands(inputVideo) {
-    const estimationConfig = { flipHorizontal: true };//for selfies
+    const estimationConfig = { flipHorizontal: true };
 
     async function loop() {
         const hands = await handPoseModel.estimateHands(inputVideo, estimationConfig);
-
+        // Debug log
         if (hands.length > 0) {
-            const keypoints = hands[0].keypoints;
-            detectSnap(keypoints);//detection of snap
+            null
+            // console.log(`Detected ${hands.length} hand(s), handSnap: ${handSnap}, isInCooldown: ${isInCooldown}`);
         }
-        if(hands.length ===2){
+
+        if (hands.length === 1) {
+            console.log("hands detected:")
+
+            const keypoints = hands[0].keypoints;
+            detectSnap(keypoints);
+        }
+
+        if (hands.length === 2) {
             exitAscii(hands);
         }
+
         requestAnimationFrame(loop);
     }
 
     loop();
 }
-//setting up the model
+
 export async function initHandPoseModel() {
     const inputVideo = document.getElementById("video");
     try {
@@ -109,9 +136,13 @@ export async function initHandPoseModel() {
         };
 
         handPoseModel = await handPoseDetection.createDetector(model, detectorConfig);
-        // Start detection loop
-        conseCutiveCoolDown()
 
+        // Initialize state
+        isInCooldown = false;
+        handSnap = false;
+        wasInSnapRange = false;
+
+        console.log("Hand pose model initialized");
         detectHands(inputVideo);
     } catch (e) {
         console.error(`${e} error occurred`);
