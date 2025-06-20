@@ -66,7 +66,7 @@ function exitAscii(hands) {
         let distance = calculateDistance(index1.x, index2.x, index1.y, index2.y);
         console.log("Distance between hands:", distance);
 
-        if (distance < 40 && distance > 10) {
+        if (distance < 30 && distance > 5) {
             console.log("EXIT DETECTED!");
 
             // Set cooldown immediately
@@ -74,24 +74,22 @@ function exitAscii(hands) {
 
             setTimeout(() => {
                 stopAscii();
-                resetSnapState();
+                console.log("resetting");
+                handSnap = false;
+                wasInSnapRange = false;
+                isInCooldown = false;
             }, 300);
         }
     }
 }
 
-function resetSnapState() {
-    console.log("Resetting snap state...");
-    handSnap = false;
-    wasInSnapRange = false;
-}
 
 function startCooldown() {
     isInCooldown = true;
     setTimeout(() => {
         isInCooldown = false;
         // console.log("Cooldown ended - ready for exit detection");
-    }, 100);
+    }, 300);
 }
 
 async function detectHands(inputVideo) {
@@ -113,6 +111,7 @@ async function detectHands(inputVideo) {
         }
 
         if (hands.length === 2) {
+            console.log("2 hands detected:")
             exitAscii(hands);
         }
 
